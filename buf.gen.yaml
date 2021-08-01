@@ -1,0 +1,28 @@
+version: v1beta1
+plugins:
+  - name: go
+    out: api
+    opt: paths=source_relative
+  - name: go-grpc
+    out: api
+    opt: paths=source_relative
+  - name: js
+    out: clients/admin/src/api
+    opt:
+      - import_style=commonjs,binary
+  - name: grpc-web
+    out: clients/admin/src/api
+    opt:
+      - mode=grpcwebtext
+      - import_style=typescript
+  - name: grpc-web
+    out: clients/store/src/api
+    opt:
+      - mode=grpcwebtext
+      - import_style=commonjs+dts
+  #- name: ts
+  #  out: api
+  #  path: ./node_modules/.bin/protoc-gen-ts
+  #  opt:
+  #    - import_style=commonjs,binary
+   #   - service=grpc-web

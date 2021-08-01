@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+option go_package = "tb/api/store/v1;storev1";
+
+package tb.store.v1;
