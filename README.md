@@ -1,6 +1,13 @@
 # ticketbooth-ng
 Next generation of FOSS ticket sales solution for BBB
 
+## Architecture
+
+- Two client applications, one for consumers and one for administration
+  - Clients written in Vue3 + Typescript
+- Both communicate to a single GRPC (grpc-web capable) Go API
+- API backs onto SQL database.
+
 ## Developing
 
 ```shell
