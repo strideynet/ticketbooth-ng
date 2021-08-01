@@ -15,14 +15,12 @@ plugins:
     opt:
       - mode=grpcwebtext
       - import_style=typescript
+  - name: js
+    out: clients/store/src/api
+    opt:
+      - import_style=commonjs,binary
   - name: grpc-web
     out: clients/store/src/api
     opt:
       - mode=grpcwebtext
-      - import_style=commonjs+dts
-  #- name: ts
-  #  out: api
-  #  path: ./node_modules/.bin/protoc-gen-ts
-  #  opt:
-  #    - import_style=commonjs,binary
-   #   - service=grpc-web
+      - import_style=typescript
