@@ -1,17 +1,17 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net"
 	http2 "net/http"
-
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"os"
+	"tb/admin"
 	adminv1 "tb/api/admin/v1"
+	gprchandlers "tb/handlers"
 )
 
 func run() error {
@@ -34,7 +34,7 @@ func run() error {
 	}
 
 	srv := grpc.NewServer()
-	adminv1.RegisterAdminServer(srv, &adminServer{})
+	adminv1.RegisterAdminServer(srv, admin.GRPC())
 	reflection.Register(srv)
 
 	wrapped := grpcweb.WrapServer(srv,
@@ -83,11 +83,13 @@ See:
 
 	var stopChan chan error
 	go func() {
+		logger.Info("http listening", zap.String("port", httpPort))
 		err := http.Serve(httpLis)
 		stopChan <- err
 	}()
 
 	go func() {
+		logger.Info("grpc listening", zap.String("port", grpcPort))
 		err := srv.Serve(grpcLis)
 		stopChan <- err
 	}()
@@ -101,19 +103,4 @@ func main() {
 		fmt.Printf("fatal err: %s", err)
 		os.Exit(1)
 	}
-}
-
-type adminServer struct {
-	adminv1.UnimplementedAdminServer
-}
-
-func (as *adminServer) ServerInfo(context.Context, *adminv1.ServerInfoRequest) (*adminv1.ServerInfoResponse, error) {
-	hostname, err := os.Hostname()
-	if err != nil {
-		return nil, err
-	}
-	return &adminv1.ServerInfoResponse{
-		Version:  "indev",
-		HostName: hostname,
-	}, nil
 }
