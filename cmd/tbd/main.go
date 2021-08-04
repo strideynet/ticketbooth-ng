@@ -1,8 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/go-sql-driver/mysql"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -11,7 +14,8 @@ import (
 	"os"
 	"tb/admin"
 	adminv1 "tb/api/admin/v1"
-	gprchandlers "tb/handlers"
+	settingsv1 "tb/api/settings/v1"
+	"tb/settings"
 )
 
 func run() error {
@@ -21,6 +25,7 @@ func run() error {
 	}
 	defer logger.Sync()
 
+	// Setup listeners
 	httpPort := ":8090"
 	httpLis, err := net.Listen("tcp", httpPort)
 	if err != nil {
@@ -33,10 +38,31 @@ func run() error {
 		return err
 	}
 
+	// Setup SQLX connection
+	var db *sqlx.DB
+	{
+		dbConfig := mysql.NewConfig()
+		dbConnector, err := mysql.NewConnector(dbConfig)
+		if err != nil {
+			return err
+		}
+
+		db = sqlx.NewDb(sql.OpenDB(dbConnector), "sql")
+	}
+
+	// Setup GRPC handlers
 	srv := grpc.NewServer()
-	adminv1.RegisterAdminServer(srv, admin.GRPC())
+
+	settingsRepo := settings.NewSQLRepo(db)
+	settingsHandler := settings.NewGRPCHandler(logger, settingsRepo)
+	settingsv1.RegisterSettingsServer(srv, settingsHandler)
+
+	adminHandler := admin.NewGRPCHandler()
+	adminv1.RegisterAdminServer(srv, adminHandler)
+
 	reflection.Register(srv)
 
+	// Setup grpcweb multiplexing
 	wrapped := grpcweb.WrapServer(srv,
 		grpcweb.WithOriginFunc(func(origin string) bool {
 			return true
@@ -81,6 +107,7 @@ See:
 		}),
 	}
 
+	// Listen on grpc & http
 	var stopChan chan error
 	go func() {
 		logger.Info("http listening", zap.String("port", httpPort))

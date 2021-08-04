@@ -12,13 +12,11 @@ import (
 type grpc struct {
 	l *zap.Logger
 	settingsv1.UnimplementedSettingsServer
-	repo interface {
-		Get(ctx context.Context) (*model, error)
-	}
+	repo repo
 }
 
-func GRPC() *grpc {
-	return &grpc{}
+func NewGRPCHandler(l *zap.Logger, r repo) *grpc {
+	return &grpc{repo: r, l:l}
 }
 
 func (g *grpc) Get(ctx context.Context, req *settingsv1.GetRequest) (*settingsv1.GetResponse, error) {

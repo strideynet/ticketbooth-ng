@@ -10,7 +10,7 @@ type grpc struct {
 	adminv1.UnimplementedAdminServer
 }
 
-func GRPC() *grpc {
+func NewGRPCHandler() *grpc {
 	return &grpc{}
 }
 
