@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "tb/api/admin/v1;adminv1";
+option go_package = "tb/api/admin/v1;adminv1pb";
 
 package tb.admin.v1;
 

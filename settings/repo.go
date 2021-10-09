@@ -2,15 +2,12 @@ package settings
 
 import (
 	"context"
-	"github.com/jmoiron/sqlx"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
-type repo interface {
-	Get(ctx context.Context) (*model, error)
-}
-
-type model struct {
+type Model struct {
 	ID string `db:"string"`
 	CreatedAt time.Time `db:"created_at"`
 	MaxParticipants int `db:"max_participants"`
@@ -29,8 +26,8 @@ func NewSQLRepo(db *sqlx.DB) *sqlRepo {
 	}
 }
 
-func (r *sqlRepo) Get(ctx context.Context) (*model, error) {
-	m := &model{}
+func (r *sqlRepo) Get(ctx context.Context) (*Model, error) {
+	m := &Model{}
 	if err := r.db.GetContext(ctx, m, "SELECT * FROM settings ORDER BY created_at DESC LIMIT 1;"); err != nil {
 		return nil, err
 	}

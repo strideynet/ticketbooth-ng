@@ -14,8 +14,9 @@ import (
 	"os"
 	"tb/admin"
 	adminv1 "tb/api/admin/v1"
-	settingsv1 "tb/api/settings/v1"
+	storev1pb "tb/api/store/v1"
 	"tb/settings"
+	"tb/store"
 )
 
 func run() error {
@@ -53,9 +54,10 @@ func run() error {
 	// Setup GRPC handlers
 	srv := grpc.NewServer()
 
-	settingsRepo := settings.NewSQLRepo(db)
-	settingsHandler := settings.NewGRPCHandler(logger, settingsRepo)
-	settingsv1.RegisterSettingsServer(srv, settingsHandler)
+	_ = settings.NewSQLRepo(db)
+
+	storeHandler := store.NewGRPCHandler()
+	storev1pb.RegisterStoreServer(srv, storeHandler)
 
 	adminHandler := admin.NewGRPCHandler()
 	adminv1.RegisterAdminServer(srv, adminHandler)

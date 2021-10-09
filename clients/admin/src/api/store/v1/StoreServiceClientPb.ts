@@ -1,5 +1,5 @@
 /**
- * @fileoverview gRPC-Web generated client stub for tb.settings.v1
+ * @fileoverview gRPC-Web generated client stub for tb.store.v1
  * @enhanceable
  * @public
  */
@@ -13,10 +13,10 @@
 
 import * as grpcWeb from 'grpc-web';
 
-import * as settings_v1_settings_pb from '../../settings/v1/settings_pb';
+import * as store_v1_store_pb from '../../store/v1/store_pb';
 
 
-export class SettingsClient {
+export class StoreClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
   credentials_: null | { [index: string]: string; };
@@ -35,44 +35,44 @@ export class SettingsClient {
     this.options_ = options;
   }
 
-  methodInfoGet = new grpcWeb.AbstractClientBase.MethodInfo(
-    settings_v1_settings_pb.GetResponse,
-    (request: settings_v1_settings_pb.GetRequest) => {
+  methodInfoGetSettings = new grpcWeb.AbstractClientBase.MethodInfo(
+    store_v1_store_pb.GetSettingsResponse,
+    (request: store_v1_store_pb.GetSettingsRequest) => {
       return request.serializeBinary();
     },
-    settings_v1_settings_pb.GetResponse.deserializeBinary
+    store_v1_store_pb.GetSettingsResponse.deserializeBinary
   );
 
-  get(
-    request: settings_v1_settings_pb.GetRequest,
-    metadata: grpcWeb.Metadata | null): Promise<settings_v1_settings_pb.GetResponse>;
+  getSettings(
+    request: store_v1_store_pb.GetSettingsRequest,
+    metadata: grpcWeb.Metadata | null): Promise<store_v1_store_pb.GetSettingsResponse>;
 
-  get(
-    request: settings_v1_settings_pb.GetRequest,
+  getSettings(
+    request: store_v1_store_pb.GetSettingsRequest,
     metadata: grpcWeb.Metadata | null,
     callback: (err: grpcWeb.Error,
-               response: settings_v1_settings_pb.GetResponse) => void): grpcWeb.ClientReadableStream<settings_v1_settings_pb.GetResponse>;
+               response: store_v1_store_pb.GetSettingsResponse) => void): grpcWeb.ClientReadableStream<store_v1_store_pb.GetSettingsResponse>;
 
-  get(
-    request: settings_v1_settings_pb.GetRequest,
+  getSettings(
+    request: store_v1_store_pb.GetSettingsRequest,
     metadata: grpcWeb.Metadata | null,
     callback?: (err: grpcWeb.Error,
-               response: settings_v1_settings_pb.GetResponse) => void) {
+               response: store_v1_store_pb.GetSettingsResponse) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
         this.hostname_ +
-          '/tb.settings.v1.Settings/Get',
+          '/tb.store.v1.Store/GetSettings',
         request,
         metadata || {},
-        this.methodInfoGet,
+        this.methodInfoGetSettings,
         callback);
     }
     return this.client_.unaryCall(
     this.hostname_ +
-      '/tb.settings.v1.Settings/Get',
+      '/tb.store.v1.Store/GetSettings',
     request,
     metadata || {},
-    this.methodInfoGet);
+    this.methodInfoGetSettings);
   }
 
 }

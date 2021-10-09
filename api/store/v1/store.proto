@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option go_package = "tb/api/store/v1;storev1pb";
+
+import "google/protobuf/timestamp.proto";
+
+package tb.store.v1;
+
+service Store {
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse);
+}
+
+message GetSettingsRequest {
+
+}
+
+message GetSettingsResponse {
+  int64 max_participants = 1;
+
+  bool sales_disabled = 2;
+  google.protobuf.Timestamp sales_open_at = 3;
+
+  enum SalesState {
+    UNKNOWN = 0;
+    DISABLED = 1;
+    BEFORE_OPEN = 2;
+    OPEN = 3;
+    SOLD_OUT = 4;
+  }
+  SalesState sales_state = 4;
+}
