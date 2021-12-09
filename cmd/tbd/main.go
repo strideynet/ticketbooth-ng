@@ -1,22 +1,22 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
-	"github.com/go-sql-driver/mysql"
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	"github.com/jmoiron/sqlx"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	"net"
 	http2 "net/http"
 	"os"
 	"tb/admin"
 	adminv1 "tb/api/admin/v1"
 	storev1pb "tb/api/store/v1"
-	"tb/settings"
+	"tb/dal"
 	"tb/store"
+
+	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/jackc/pgx/v4/pgxpool"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func run() error {
@@ -25,6 +25,8 @@ func run() error {
 		return err
 	}
 	defer logger.Sync()
+
+	ctx := context.Background()
 
 	// Setup listeners
 	httpPort := ":8090"
@@ -39,22 +41,19 @@ func run() error {
 		return err
 	}
 
-	// Setup SQLX connection
-	var db *sqlx.DB
-	{
-		dbConfig := mysql.NewConfig()
-		dbConnector, err := mysql.NewConnector(dbConfig)
-		if err != nil {
-			return err
-		}
-
-		db = sqlx.NewDb(sql.OpenDB(dbConnector), "sql")
-	}
-
 	// Setup GRPC handlers
 	srv := grpc.NewServer()
 
-	_ = settings.NewSQLRepo(db)
+	dbCfg, err := pgxpool.ParseConfig("")
+	if err != nil {
+		return err
+	}
+	dbPool, err := pgxpool.ConnectConfig(ctx, dbCfg)
+	if err != nil {
+		return err
+	}
+
+	db := dal.NewPostgres(dbPool)
 
 	storeHandler := store.NewGRPCHandler()
 	storev1pb.RegisterStoreServer(srv, storeHandler)

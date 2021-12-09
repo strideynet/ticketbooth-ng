@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	storev1pb "tb/api/store/v1"
-	"tb/settings"
+	"tb/dal"
 )
 
 type grpc struct {
@@ -13,7 +13,7 @@ type grpc struct {
 }
 
 type settingsFetcher interface {
-	Get(ctx context.Context) (*settings.Model, error)
+	Get(ctx context.Context) (*dal.Settings, error)
 }
 
 func NewGRPCHandler(settings settingsFetcher) *grpc {
@@ -22,7 +22,7 @@ func NewGRPCHandler(settings settingsFetcher) *grpc {
 	}
 }
 
-func (g *grpc)GetSettings(ctx context.Context, req *storev1pb.GetSettingsRequest) (*storev1pb.GetSettingsResponse,error) {
+func (g *grpc) GetSettings(ctx context.Context, req *storev1pb.GetSettingsRequest) (*storev1pb.GetSettingsResponse, error) {
 	stngs, err := g.settings.Get(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch settings: %s", err)
