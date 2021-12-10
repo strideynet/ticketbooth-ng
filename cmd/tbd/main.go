@@ -6,14 +6,10 @@ import (
 	"net"
 	http2 "net/http"
 	"os"
-	"tb/admin"
 	adminv1 "tb/api/admin/v1"
-	storev1pb "tb/api/store/v1"
-	"tb/dal"
-	"tb/store"
+	"tb/grpc/admin"
 
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -26,7 +22,7 @@ func run() error {
 	}
 	defer logger.Sync()
 
-	ctx := context.Background()
+	_ = context.Background()
 
 	// Setup listeners
 	httpPort := ":8090"
@@ -44,19 +40,16 @@ func run() error {
 	// Setup GRPC handlers
 	srv := grpc.NewServer()
 
-	dbCfg, err := pgxpool.ParseConfig("")
-	if err != nil {
-		return err
-	}
-	dbPool, err := pgxpool.ConnectConfig(ctx, dbCfg)
-	if err != nil {
-		return err
-	}
-
-	db := dal.NewPostgres(dbPool)
-
-	storeHandler := store.NewGRPCHandler()
-	storev1pb.RegisterStoreServer(srv, storeHandler)
+	// dbCfg, err := pgxpool.ParseConfig("")
+	// if err != nil {
+	// 	return err
+	// }
+	// dbPool, err := pgxpool.ConnectConfig(ctx, dbCfg)
+	// if err != nil {
+	// 	return err
+	// }
+	//
+	// db := dal.NewPostgres(dbPool)
 
 	adminHandler := admin.NewGRPCHandler()
 	adminv1.RegisterAdminServer(srv, adminHandler)

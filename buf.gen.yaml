@@ -7,20 +7,11 @@ plugins:
     out: api
     opt: paths=source_relative
   - name: js
-    out: clients/admin/src/api
+    out: clients/store-react/src/api
     opt:
       - import_style=commonjs,binary
   - name: grpc-web
-    out: clients/admin/src/api
-    opt:
-      - mode=grpcwebtext
-      - import_style=typescript
-  - name: js
-    out: clients/store/src/api
-    opt:
-      - import_style=commonjs,binary
-  - name: grpc-web
-    out: clients/store/src/api
+    out: clients/store-react/src/api
     opt:
       - mode=grpcwebtext
       - import_style=typescript

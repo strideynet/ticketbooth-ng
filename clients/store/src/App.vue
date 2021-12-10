@@ -1,30 +1,43 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <n-config-provider :theme="darkTheme">
+    <n-layout>
+      <n-layout-header bordered>
+        <n-text>
+          <span style="font-size: 32px;">BBB Tickets</span>
+        </n-text>
+      </n-layout-header>
+      <div id="nav">
+        <router-link to="/">Home</router-link> |
+        <router-link to="/about">About</router-link>
+      </div>
+      <router-view/>
+    </n-layout>
+  </n-config-provider>
+
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { defineComponent } from 'vue'
+import {
+  NLayout,
+  NConfigProvider,
+  NLayoutHeader,
+  NText,
+  darkTheme
+} from 'naive-ui'
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default defineComponent({
+  name: 'App',
+  components: {
+    NLayout,
+    NLayoutHeader,
+    NConfigProvider,
+    NText
+  },
+  setup () {
+    return {
+      darkTheme
+    }
+  }
+})
+</script>
