@@ -1,6 +1,6 @@
-import { Box, Paper, Typography } from '@mui/material';
-import * as React from 'react';
-export default function Home() {
+import { Box, Paper, Typography } from '@mui/material'
+
+export default function Home () {
   return (
     <Box sx={{ my: 4 }}>
         <Paper>
@@ -9,5 +9,5 @@ export default function Home() {
         </Typography>
         </Paper>
     </Box>
-  );
+  )
 }

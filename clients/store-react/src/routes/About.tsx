@@ -1,17 +1,17 @@
-import * as React from 'react';
-import {ServerInfoRequest, ServerInfoResponse} from "../api/admin/v1/admin_pb";
-import { AdminClient } from '../api/admin/v1/AdminServiceClientPb';
-import { Box, Paper, Typography } from '@mui/material';
+import * as React from 'react'
+import { ServerInfoRequest, ServerInfoResponse } from '../api/admin/v1/admin_pb'
+import { AdminClient } from '../api/admin/v1/AdminServiceClientPb'
+import { Box, Paper, Typography } from '@mui/material'
 
-export default function About() {
+export default function About () {
   const [serverData, setServerData] = React.useState<ServerInfoResponse>()
-    
+
   React.useEffect(() => {
-    async function fetchData() {
-        const ac = new AdminClient("http://localhost:8090", null, null)
-        const req = new ServerInfoRequest()
-        const res = await ac.serverInfo(req, null)
-        setServerData(res)
+    async function fetchData (): Promise<void> {
+      const ac = new AdminClient('http://localhost:8090', null, null)
+      const req = new ServerInfoRequest()
+      const res = await ac.serverInfo(req, null)
+      setServerData(res)
     }
 
     fetchData()
@@ -24,9 +24,9 @@ export default function About() {
             About
         </Typography>
         <Typography variant="body1">
-        {serverData !== undefined ? JSON.stringify(serverData.toObject()) : "loading"} 
+        {serverData !== undefined ? JSON.stringify(serverData.toObject()) : 'loading'}
         </Typography>
         </Paper>
     </Box>
-  );
+  )
 }
