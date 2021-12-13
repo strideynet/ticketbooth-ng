@@ -1,13 +1,9 @@
-import { Box, Paper, Typography } from '@mui/material'
-
+import { Grid } from '@mui/material'
+import React from 'react'
 export default function Home () {
   return (
-    <Box sx={{ my: 4 }}>
-        <Paper>
-        <Typography variant="h3" component="h1">
-            Home
-        </Typography>
-        </Paper>
-    </Box>
+    <Grid container spacing={3}>
+     <h1> Home</h1>
+    </Grid>
   )
 }
