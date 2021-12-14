@@ -18,7 +18,10 @@ googleAuthProvider.setCustomParameters({
 
 const UserContext = createContext<User | null>(null)
 
-export const UserProvider: React.FC<{children: any}> = ({ children }): React.ReactElement => {
+type UserProviderProps = {
+  children: React.ReactNode
+}
+export function UserProvider ({ children }: UserProviderProps): React.ReactElement {
   const [user, setUser] = useState<User | null>(null)
   useEffect(() => {
     onAuthStateChanged(auth, (usr) => {

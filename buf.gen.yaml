@@ -7,11 +7,11 @@ plugins:
     out: api
     opt: paths=source_relative
   - name: js
-    out: clients/store-react/src/api
+    out: frontend/admin-react/src/api
     opt:
       - import_style=commonjs,binary
   - name: grpc-web
-    out: clients/store-react/src/api
+    out: frontend/admin-react/src/api
     opt:
       - mode=grpcwebtext
       - import_style=typescript

@@ -4,7 +4,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import App from './App'
 import { UserProvider } from './services/firebase'
 import Debug from './routes/Debug'
-import Home from './routes/Home'
+import Dashboard from './routes/Dashboard'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -12,7 +12,7 @@ ReactDOM.render(
       <UserProvider>
         <Routes >
           <Route element={<App />}>
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<Dashboard/>}/>
             <Route path="/debug" element={<Debug/>}/>
           </Route>
         </Routes>
